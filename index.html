@@ -10,6 +10,8 @@
         body{
             background-color: #E5BAD1;
             display: flex;
+            align-items: center;
+            flex-direction: column;
             justify-content: center;
             height: auto;
             margin: 0;
@@ -17,17 +19,37 @@
         .centerPage{
             background-color: #ACA6E5;
             height: fit-content;
-            width: 70vh;
+            width: 50%;
+            padding: 2vh;
         }
         .pressed { background-color: lightgrey; }
+
+        img{
+          max-height: 70%;
+          max-width: 70%;
+        }
+        header{
+          background-color: #9DD1E5;
+          padding: 3vh;
+          font-size: 3vh;
+          width: 120vh;
+        }
+
     </style>
 </head>
 <body>
+    <header>Blog de Películas de Marchena</header>
     <div id="root"></div>
     <script type="text/babel"> 
 
-
-
+    const ImageRender = ({url}) => {
+       return(
+        <div>
+          <img src={url} alt="Imagen del Día de la Marmota"/>
+        </div>
+       )
+    }
+    
     const FecthPosts = () => {
         const [posts, setPosts] = React.useState([]);
       
@@ -50,7 +72,10 @@
         return (
           <div className="centerPage">
             {posts.map((item, index) => (
-              <div key={index}>{item.title}
+              <div key={index}>
+                {item.title}<br/>
+                {item.content}<br/>
+                <ImageRender url={item.imgSrc}/>
               </div>
             ))}
           </div>
