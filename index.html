@@ -8,43 +8,89 @@
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <style>
         body{
-            background-color: #E5BAD1;
+            background-image: url('bg_image.webp');
             display: flex;
-            align-items: center;
             flex-direction: column;
-            justify-content: center;
-            height: auto;
+            align-items: center;
+            height: 100vh;
             margin: 0;
+            font-family: sans-serif;
         }
+
+        #root{
+          display: flex;
+          justify-content: center;
+        }
+
         .centerPage{
             background-color: #ACA6E5;
             height: fit-content;
-            width: 50%;
+            width: 50vw;
             padding: 2vh;
+            display: flex;
+            flex-direction: column;
+            gap: 4vh;
         }
+
         .pressed { background-color: lightgrey; }
 
+        .post{
+          background-color: #E5BAD1;
+          border-radius: 2vh;
+          width: 46vw;
+          height: fit-content;
+          padding: 2vh;
+          border-bottom: solid 0.5vh #c9a1a1;
+          border-left: solid 0.5vh #c9a1a1;
+        }
+
+        .postContent{
+          display: flex;
+          align-items: center;
+          gap: 2vh
+        }
+
+        .postText{
+          display: flex;
+          flex-direction: column;
+          gap: 3vh
+        }
         img{
-          max-height: 70%;
-          max-width: 70%;
+          max-height: 40vh;
+          max-width: 13vw;
+        }
+        .imgHolder{
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          padding: 2vh;
+          background-color: #EFEF90;
+          width: fit-content;
+          border-radius: 2vh;
+          border-bottom: solid 0.5vh #d6b77d;
+          border-left: solid 0.5vh #d6b77d;
         }
         header{
           background-color: #9DD1E5;
           padding: 3vh;
-          font-size: 3vh;
-          width: 120vh;
+          font-size: 3.5vh;
+          width: 49.2vw;
+          display: flex;
+          align-items: center;
+          justify-content: center;
         }
 
     </style>
 </head>
 <body>
-    <header>Blog de Películas de Marchena</header>
+    <header>Mi blog de peliculas</header>
     <div id="root"></div>
     <script type="text/babel"> 
 
-    const ImageRender = ({url}) => {
+    const ImageRender = ({url, movieTitle}) => {
        return(
-        <div>
+        <div className="imgHolder">
+          <p><b>{movieTitle}</b></p>
           <img src={url} alt="Imagen del Día de la Marmota"/>
         </div>
        )
@@ -72,10 +118,16 @@
         return (
           <div className="centerPage">
             {posts.map((item, index) => (
-              <div key={index}>
-                {item.title}<br/>
-                {item.content}<br/>
-                <ImageRender url={item.imgSrc}/>
+              <div key={index} className="post">
+                
+                <div className="postContent">
+                  <ImageRender url={item.imgSrc} movieTitle={item.pelicula}/>
+                  <div className="postText">
+                    <b>{item.title}</b><br/>
+                    {item.content}<br/><br/><br/>
+                    Fecha de creacion: {item.created_at}
+                  </div>
+                </div>
               </div>
             ))}
           </div>
