@@ -8,7 +8,7 @@
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <style>
         body{
-            background-image: url('bg_image.webp');
+            background-image: url('imgs/bg_image.webp');
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -80,12 +80,43 @@
           justify-content: center;
         }
 
+        .loading {
+          width: 10vh; /* Adjust width as needed */
+          height: auto; /* Maintain aspect ratio */
+          transform: rotate(0deg);
+      }
+
     </style>
 </head>
 <body>
     <header>Mi blog de peliculas</header>
     <div id="root"></div>
     <script type="text/babel"> 
+
+
+      const Loading = () => {
+        const [rotation, setRotation] = React.useState(0);
+      
+        React.useEffect(() => {
+          const intervalId = setInterval(() => {
+            setRotation(rotation => rotation + 2);
+          }, 10);
+      
+          return () => clearInterval(intervalId);
+        }, []); 
+
+        const style = {
+          transform: `rotate(${rotation}deg)`
+        };
+      
+        return (
+          <center>
+            <img src="imgs/loading_img.png" alt="Cargando Contenido" className="loading" style={style}/>
+          </center>
+            
+        );
+      };
+
 
     const ImageRender = ({url, movieTitle}) => {
        return(
@@ -98,14 +129,17 @@
     
     const FecthPosts = () => {
         const [posts, setPosts] = React.useState([]);
+        const [loading, setLoading] = React.useState(true);
       
         React.useEffect(() => {
           const getPosts = async () => {
             try {
               const response = await fetch('https://api.tiburoncin.lat/22398/posts');
               const jsonPosts = await response.json();
+              await new Promise(resolve => setTimeout(resolve, 1000))
               console.log(jsonPosts)
               setPosts(jsonPosts);
+              setLoading(false);
 
             } catch (error) {
               console.error('Error obteniendo posts:', error);
@@ -117,7 +151,10 @@
       
         return (
           <div className="centerPage">
-            {posts.map((item, index) => (
+            {loading ? (
+              <Loading />
+            ) :(
+            posts.map((item, index) => (
               <div key={index} className="post">
                 
                 <div className="postContent">
@@ -129,14 +166,24 @@
                   </div>
                 </div>
               </div>
-            ))}
+            )))}
           </div>
         );
       };
 
+      const App = () => {
+        
+        return (
+          <div>
+            <React.Suspense fallback={<Loading />}>
+              <FecthPosts />
+            </React.Suspense>
+          </div>
+        );
+      };
 
       const root = ReactDOM.createRoot(document.getElementById('root'))
-    root.render(<FecthPosts />)
+    root.render(<App />)
     </script>
 </body>
 </html>
