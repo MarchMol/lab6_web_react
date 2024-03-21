@@ -31,6 +31,13 @@
 
     // Header element
     const Header = () => {
+      // Font face style of a cool font i found for the header
+      const fontFaceStyle = {
+        fontFamily: 'Bebas Neue',
+        src: "url('https://fonts.gstatic.com/s/bebasneue/v2/JTUSjIg69CK48gW7PXoo9Wdhzg.ttf') format('truetype')",
+        fontWeight: 'bold',
+        fontStyle: 'normal'
+      };
       // Header style 
       const styles = {
         header: {
@@ -43,7 +50,19 @@
           justifyContent: 'center',
         }
       };
-      return <header style={styles.header}>Mi blog de peliculas</header>
+      return <header style={styles.header}>
+        <style>
+          {`
+            @font-face {
+              font-family: '${fontFaceStyle.fontFamily}';
+              src: ${fontFaceStyle.src};
+              font-weight: ${fontFaceStyle.fontWeight};
+              font-style: ${fontFaceStyle.fontStyle};
+            }
+          `}
+        </style>
+        <b>BLOG DE PELICULAS</b>
+      </header>
     }
 
     // Loading component (image, rotation and all that)
@@ -161,6 +180,9 @@
           flexDirection: 'column',
           gap: '3vh'
         },
+        lighterText: { // A lighter color for the timestamp text
+          color: '#676767'
+        }
       };
 
       if (error) { // error handler
@@ -179,9 +201,9 @@
                 <div style={styles.postContent}>
                   <ImageRender url={item.imgSrc} movieTitle={item.pelicula} />
                   <div style={styles.postText}>
-                    <b>{item.title}</b><br />
+                    <h3><b>{item.title}</b></h3><br />
                     {item.content}<br /><br /><br />
-                    Fecha de creacion: {item.created_at}
+                    <p style={styles.lighterText}>Fecha de creacion: {item.created_at}</p>
                   </div>
                 </div>
               </div>
