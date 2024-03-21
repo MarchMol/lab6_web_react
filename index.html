@@ -6,93 +6,39 @@
     <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    <style>
-        body{
-            background-image: url('https://wallpaperaccess.com/full/5457303.png');
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            font-family: sans-serif;
-        }
-
-        #root{
-          display: flex;
-          justify-content: center;
-        }
-
-        .centerPage{
-            background-color: #ACA6E5;
-            height: fit-content;
-            width: 50vw;
-            padding: 2vh;
-            display: flex;
-            flex-direction: column;
-            gap: 4vh;
-        }
-
-        .pressed { background-color: lightgrey; }
-
-        .post{
-          background-color: #E5BAD1;
-          border-radius: 2vh;
-          width: 46vw;
-          height: fit-content;
-          padding: 2vh;
-          border-bottom: solid 0.5vh #c9a1a1;
-          border-left: solid 0.5vh #c9a1a1;
-        }
-
-        .postContent{
-          display: flex;
-          align-items: center;
-          gap: 2vh
-        }
-
-        .postText{
-          display: flex;
-          flex-direction: column;
-          gap: 3vh
-        }
-        img{
-          max-height: 40vh;
-          max-width: 13vw;
-        }
-        .imgHolder{
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          padding: 2vh;
-          background-color: #EFEF90;
-          width: fit-content;
-          border-radius: 2vh;
-          border-bottom: solid 0.5vh #d6b77d;
-          border-left: solid 0.5vh #d6b77d;
-        }
-        header{
-          background-color: #9DD1E5;
-          padding: 3vh;
-          font-size: 3.5vh;
-          width: 49.2vw;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-
-        .loading {
-          width: 10vh; /* Adjust width as needed */
-          height: auto; /* Maintain aspect ratio */
-          transform: rotate(0deg);
-      }
-
-    </style>
 </head>
 <body>
-    <header>Mi blog de peliculas</header>
     <div id="root"></div>
     <script type="text/babel"> 
+      document.body.style.backgroundImage = "url('https://wallpaperaccess.com/full/5457303.png')";
+      document.body.style.display = "flex";
+      document.body.style.flexDirection = "column";
+      document.body.style.alignItems = "center";
+      document.body.style.height = "100vh";
+      document.body.style.margin = "0";
+      document.body.style.fontFamily = "sans-serif";
 
+
+      const rootElement = document.getElementById('root');
+      if (rootElement) {
+        rootElement.style.display = 'flex';
+        rootElement.style.justifyContent = 'center';
+      }
+
+      const Header = () => {
+        const styles = {
+          header: {
+            backgroundColor: '#9DD1E5',
+            padding: '3vh',
+            fontSize: '3.5vh',
+            width: '49.2vw',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }
+        };
+        return <header style={styles.header}>Mi blog de peliculas</header>
+      }
 
       const Loading = () => {
         const [rotation, setRotation] = React.useState(0);
@@ -106,12 +52,16 @@
         }, []); 
 
         const style = {
-          transform: `rotate(${rotation}deg)`
+          loading: {
+            width: '10vh', /* Adjust width as needed */
+            height: 'auto', /* Maintain aspect ratio */
+            transform: `rotate(${rotation}deg)`
+        }
         };
       
         return (
           <center>
-            <img src="https://cdn-icons-png.flaticon.com/512/189/189792.png" alt="Cargando Contenido" className="loading" style={style}/>
+            <img src="https://cdn-icons-png.flaticon.com/512/189/189792.png" alt="Cargando Contenido" style={style.loading}/>
           </center>
             
         );
@@ -119,10 +69,28 @@
 
 
     const ImageRender = ({url, movieTitle}) => {
+      const style ={
+          imgHolder: {
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            padding: '2vh',
+            backgroundColor: '#EFEF90',
+            width: 'fit-content',
+            borderRadius: '2vh',
+            borderBottom: 'solid 0.5vh #d6b77d',
+            borderLeft: 'solid 0.5vh #d6b77d'
+          },
+          img: {
+            maxHeight: '40vh',
+            maxWidth: '13vw',
+          }
+      };
+
        return(
-        <div className="imgHolder">
+        <div style={style.imgHolder}>
           <p><b>{movieTitle}</b></p>
-          <img src={url} alt="Imagen del Día de la Marmota"/>
+          <img src={url} alt={movieTitle} style={style.img}/>
         </div>
        )
     }
@@ -152,31 +120,63 @@
       
           getPosts();
         }, []); 
-      
+
+        const styles = {
+          postContent: {
+            display: 'flex',
+            alignItems: 'center',
+            gap: '2vh'
+          },
+          postText: {
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '3vh'
+          },
+          centerPage: {
+            backgroundColor: '#ACA6E5',
+            height: 'fit-content',
+            width: '50vw',
+            padding: '2vh',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '4vh'
+          },
+          post: {
+            backgroundColor: '#E5BAD1',
+            borderRadius: '2vh',
+            width: '46vw',
+            height: 'fit-content',
+            padding: '2vh',
+            borderBottom: 'solid 0.5vh #c9a1a1',
+            borderLeft: 'solid 0.5vh #c9a1a1'
+          }
+        };
+
+        
          if (error) {
-          return <div className="centerPage">
+          return <div style={styles.centerPage}>
             Error comunicando con la API: {error.message}
           </div>;
         }
 
         return (
-          <div className="centerPage">
-            {loading ? (
+          <div style={styles.centerPage}>
+            {loading ? 
               <Loading />
-            ) :
+              : 
               posts.map((item, index) => (
-              <div key={index} className="post">
-                
-                <div className="postContent">
-                  <ImageRender url={item.imgSrc} movieTitle={item.pelicula}/>
-                  <div className="postText">
-                    <b>{item.title}</b><br/>
-                    {item.content}<br/><br/><br/>
-                    Fecha de creacion: {item.created_at}
+                <div key={index} style={styles.post}>
+                  
+                  <div style={styles.postContent}>
+                    <ImageRender url={item.imgSrc} movieTitle={item.pelicula}/>
+                    <div style={styles.postText}>
+                      <b>{item.title}</b><br/>
+                      {item.content}<br/><br/><br/>
+                      Fecha de creacion: {item.created_at}
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
           </div>
         );
       };
@@ -185,6 +185,7 @@
         
         return (
           <div>
+            <Header />
             <React.Suspense fallback={<Loading />}>
               <FecthPosts />
             </React.Suspense>
